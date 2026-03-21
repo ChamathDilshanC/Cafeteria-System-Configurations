@@ -1,7 +1,7 @@
 eureka:
   client:
     service-url:
-      defaultZone: http://vm-node-a.platform:8761/eureka, http://vm-node-b.platform:8761/eureka, http://vm-node-c.platform:8761/eureka
+      defaultZone: http://localhost:8761/eureka
   instance:
     prefer-ip-address: true
 
