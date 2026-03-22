@@ -6,9 +6,9 @@ spring:
 
   # Database Configuration
   datasource:
-    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/order_service_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:14500/order_service_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: ${MYSQL_USER:root}
-    password: ${MYSQL_PASSWORD:Chamath@123}
+    password: ${MYSQL_PASSWORD:rootpassword}
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       maximum-pool-size: ${DB_POOL_SIZE:15}

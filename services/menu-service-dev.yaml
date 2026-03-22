@@ -1,10 +1,10 @@
 spring:
   application:
-    name: user-service
+    name: menu-service
   datasource:
-    url: jdbc:mysql://localhost:3306/user_service_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://localhost:14500/menu_service_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
     username: root
-    password: Chamath@123
+    password: rootpassword
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
