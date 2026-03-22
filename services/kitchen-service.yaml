@@ -14,7 +14,7 @@ spring:
         type: auto
 
 server:
-  port: ${KITCHEN_SERVICE_PORT:8084}
+  port: 0 # Use random port for better scalability and load balancing
 
 # Kitchen-specific Configuration
 kitchen:
@@ -66,3 +66,6 @@ management:
   health:
     mongo:
       enabled: true
+eureka:
+  instance:
+    instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
