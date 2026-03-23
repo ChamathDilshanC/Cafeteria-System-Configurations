@@ -7,10 +7,10 @@ management:
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: '*'
 
 logging:
   level:
-    lk.ijse.eca: DEBUG
+    com.cafeteria: DEBUG
     org.springframework.web: INFO
     org.hibernate.SQL: DEBUG
