@@ -1,15 +1,19 @@
-# Order Service Configuration
+# Order Service Configuration (Dev)
 
 spring:
   application:
     name: order-service
 
+  mvc:
+    problemdetails:
+      enabled: true
+
   # Database Configuration
   datasource:
-    url: jdbc:mysql://${MYSQL_HOST:localhost}:14500/order_service_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-    username: ${MYSQL_USER:root}
-    password: ${MYSQL_PASSWORD:rootpassword}
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:5432/order_service_db
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: ${DB_POOL_SIZE:15}
       minimum-idle: ${DB_MIN_IDLE:5}
@@ -22,7 +26,7 @@ spring:
     show-sql: ${JPA_SHOW_SQL:false}
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
 
   # Circuit Breaker Configuration
@@ -37,7 +41,7 @@ spring:
         enabled: true
 
 server:
-  port: 0 # Use random port for better scalability and load balancing
+  port: 0
 
 # Feign Client Configuration
 feign:
@@ -82,9 +86,9 @@ resilience4j:
 # Order Configuration
 order:
   status:
-    auto-confirm-timeout: ${AUTO_CONFIRM_TIMEOUT:300} # 5 minutes
+    auto-confirm-timeout: ${AUTO_CONFIRM_TIMEOUT:300}
   payment:
-    timeout: ${PAYMENT_TIMEOUT:600} # 10 minutes
+    timeout: ${PAYMENT_TIMEOUT:600}
   notification:
     enabled: ${NOTIFICATION_ENABLED:true}
 
@@ -99,6 +103,7 @@ management:
   health:
     circuitbreakers:
       enabled: true
+
 eureka:
   instance:
     instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}

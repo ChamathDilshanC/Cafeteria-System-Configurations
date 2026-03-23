@@ -1,20 +1,38 @@
 spring:
-  application:
-    name: menu-service
+  mvc:
+    problemdetails:
+      enabled: true
+
   datasource:
-    url: jdbc:mysql://localhost:14500/menu_service_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
-    username: root
-    password: rootpassword
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:postgresql://localhost:5432/menu_service_db
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
   jpa:
     hibernate:
       ddl-auto: update
+    show-sql: true
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+  # GCP Storage Configuration (for menu item images)
+  cloud:
+    gcp:
+      project-id: ${GCP_PROJECT_ID:your-gcp-project-id}
+      storage:
+        bucket: ${GCP_STORAGE_BUCKET:your-bucket-name}
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 5MB
+      max-request-size: 10MB
 
 server:
-  port: 0 # Use random port for better scalability and load balancing
+  port: 0
 
 eureka:
   instance:

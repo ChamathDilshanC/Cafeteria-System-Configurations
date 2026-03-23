@@ -1,15 +1,13 @@
 eureka:
   client:
     service-url:
-      defaultZone: http://vm-node-a.platform:8761/eureka, http://vm-node-b.platform:8761/eureka, http://vm-node-c.platform:8761/eureka
-  instance:
-    prefer-ip-address: true
+      defaultZone: http://vm-node-a.platform:9001/eureka, http://vm-node-b.platform:9001/eureka, http://vm-node-c.platform:9001/eureka
 
 management:
   endpoints:
     web:
       exposure:
-        include: '*'
+        include: "*"
 
 logging:
   level:

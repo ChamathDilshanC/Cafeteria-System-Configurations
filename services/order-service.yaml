@@ -1,19 +1,26 @@
 spring:
-  application:
-    name: order-service
+  mvc:
+    problemdetails:
+      enabled: true
+
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/order_service_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-    username: root
-    password: Chamath@123
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:postgresql://localhost:5432/order_service_db
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
   jpa:
     hibernate:
       ddl-auto: update
+    show-sql: true
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+#        format_sql: true
+
 server:
   port: 0
+
 eureka:
   instance:
     instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
