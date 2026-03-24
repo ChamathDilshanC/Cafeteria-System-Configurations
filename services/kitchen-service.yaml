@@ -7,11 +7,7 @@ spring:
   # MongoDB Configuration
   data:
     mongodb:
-      uri: mongodb://root:xJ0yJnXGEDgDgPCUUof4BYrtCOZS-04pd0lQcAI4mIXjqNh_@1db9d214-32cc-42fa-b69b-36a5525b2149.asia-southeast1.firestore.goog:443/cafeteria-nosql-db?loadBalanced=true&tls=true&authMechanism=SCRAM-SHA-256&retryWrites=false
-      database: kitchen_service_db
-      auto-index-creation: ${MONGO_AUTO_INDEX:true}
-      repositories:
-        type: auto
+      uri: mongodb://root:pfUSvXhOsbDqTUoFAv9uXJ0dUNBer9drrxkTdCDKg_o2BNb_@22c2eb13-d4d7-4b47-b4a8-d96dc1c8f2eb.asia-southeast1.firestore.goog:443/cafeteria-firestore-mongo?loadBalanced=true&tls=true&authMechanism=SCRAM-SHA-256&retryWrites=false
 
 server:
   port: 0 # Use random port for better scalability and load balancing
