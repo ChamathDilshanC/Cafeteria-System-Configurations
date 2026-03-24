@@ -16,14 +16,14 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-#        format_sql: true
+  #        format_sql: true
 
   # GCP Storage Configuration (for menu item images)
   cloud:
     gcp:
-      project-id: ${GCP_PROJECT_ID:your-gcp-project-id}
+      project-id: long-carving-491207-n4
       storage:
-        bucket: ${GCP_STORAGE_BUCKET:your-bucket-name}
+        bucket: cafeteria-system-menu-images
 
   servlet:
     multipart:
