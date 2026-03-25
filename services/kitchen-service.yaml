@@ -7,7 +7,7 @@ spring:
   # MongoDB Configuration
   data:
     mongodb:
-      uri: mongodb://root:pfUSvXhOsbDqTUoFAv9uXJ0dUNBer9drrxkTdCDKg_o2BNb_@22c2eb13-d4d7-4b47-b4a8-d96dc1c8f2eb.asia-southeast1.firestore.goog:443/cafeteria-firestore-mongo?loadBalanced=true&tls=true&authMechanism=SCRAM-SHA-256&retryWrites=false
+      uri: mongodb://root:JRTgq5KibyHckge0t5SWLXMgjzdH5IJk6ozSAx7k8pYrwoXp@f2e45088-9d0e-4153-9ea7-e017549f617d.asia-southeast1.firestore.goog:443/cafeteria-firestore-mongo?loadBalanced=true&tls=true&authMechanism=SCRAM-SHA-256&retryWrites=false
 
 server:
   port: 0 # Use random port for better scalability and load balancing
