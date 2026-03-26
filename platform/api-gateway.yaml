@@ -10,33 +10,31 @@ spring:
             allowed-methods: '*'
             allowed-headers: '*'
             allow-credentials: true
-      server:
-        webflux:
-          routes:
-            - id: user-service
-              uri: lb://USER-SERVICE
-              predicates:
-                - Path=/api/auth/**, /api/users/**
-              filters:
-                - StripPrefix=1
-            - id: menu-service
-              uri: lb://MENU-SERVICE
-              predicates:
-                - Path=/api/menu/**, /api/categories/**
-              filters:
-                - StripPrefix=1
-            - id: order-service
-              uri: lb://ORDER-SERVICE
-              predicates:
-                - Path=/api/orders/**
-              filters:
-                - StripPrefix=1
-            - id: kitchen-service
-              uri: lb://KITCHEN-SERVICE
-              predicates:
-                - Path=/api/kitchen/**
-              filters:
-                - StripPrefix=1
+      routes:
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/api/auth/**, /api/users/**
+          filters:
+            - StripPrefix=1
+        - id: menu-service
+          uri: lb://MENU-SERVICE
+          predicates:
+            - Path=/api/menu/**, /api/categories/**
+          filters:
+            - StripPrefix=1
+        - id: order-service
+          uri: lb://ORDER-SERVICE
+          predicates:
+            - Path=/api/orders/**
+          filters:
+            - StripPrefix=1
+        - id: kitchen-service
+          uri: lb://KITCHEN-SERVICE
+          predicates:
+            - Path=/api/kitchen/**
+          filters:
+            - StripPrefix=1
       default-filters:
         - PreserveHostHeader
 
@@ -46,7 +44,7 @@ server:
 eureka:
   client:
     service-url:
-      default-zone: http://localhost:9001/eureka/
+      defaultZone: http://vm-node-a.platform:9001/eureka/
   instance:
     prefer-ip-address: true
 
