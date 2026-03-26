@@ -1,55 +1,37 @@
 spring:
-  application:
-    name: api-gateway
   cloud:
     gateway:
-      globalcors:
-        cors-configurations:
-          '[/**]':
-            allowedOriginPatterns: '*'
-            allowed-methods: '*'
-            allowed-headers: '*'
-            allow-credentials: true
-      routes:
-        - id: user-service
-          uri: lb://USER-SERVICE
-          predicates:
-            - Path=/api/auth/**, /api/users/**
-          filters:
-            - StripPrefix=1
-        - id: menu-service
-          uri: lb://MENU-SERVICE
-          predicates:
-            - Path=/api/menu/**, /api/categories/**
-          filters:
-            - StripPrefix=1
-        - id: order-service
-          uri: lb://ORDER-SERVICE
-          predicates:
-            - Path=/api/orders/**
-          filters:
-            - StripPrefix=1
-        - id: kitchen-service
-          uri: lb://KITCHEN-SERVICE
-          predicates:
-            - Path=/api/kitchen/**
-          filters:
-            - StripPrefix=1
-      default-filters:
-        - PreserveHostHeader
+      server:
+        webflux:
+          routes:
+            - id: user-service
+              uri: lb://USER-SERVICE
+              predicates:
+                - Path=/api/auth/**, /api/users/**
 
+            - id: menu-service
+              uri: lb://MENU-SERVICE
+              predicates:
+                - Path=/api/menu/**, /api/categories/**
+
+            - id: order-service
+              uri: lb://ORDER-SERVICE
+              predicates:
+                - Path=/api/orders/**
+
+            - id: kitchen-service
+              uri: lb://KITCHEN-SERVICE
+              predicates:
+                - Path=/api/kitchen/**
+
+          default-filters:
+            - PreserveHostHeader
+
+          globalcors:
+            cors-configurations:
+              '[/**]':
+                allowedOrigins: '*'
+                allowed-methods: '*'
+                allowed-headers: '*'
 server:
   port: 8080
-
-eureka:
-  client:
-    service-url:
-      defaultZone: http://vm-node-a.platform:9001/eureka/
-  instance:
-    prefer-ip-address: true
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,metrics,gateway,routes
