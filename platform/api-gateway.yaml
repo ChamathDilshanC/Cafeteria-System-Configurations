@@ -34,12 +34,13 @@ spring:
           default-filters:
             - PreserveHostHeader
 
-          globalcors:
-            cors-configurations:
-              '[/**]':
-                allowedOrigins: "*"
-                allowed-methods: "*"
-                allowed-headers: "*"
+globalcors:
+  cors-configurations:
+    '[/**]':
+      allowedOriginPatterns: '*'
+      allowed-methods: '*'
+      allowed-headers: '*'
+      allow-credentials: true
 
 server:
   port: 8080
