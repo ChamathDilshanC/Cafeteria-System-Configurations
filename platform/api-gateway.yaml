@@ -1,24 +1,31 @@
 spring:
   cloud:
     gateway:
-      # මෙතන 'server' හෝ 'webflux' අයින් කළා. මේක තමයි standard විදිහ.
       routes:
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
             - Path=/api/auth/**, /api/users/**
+          filters:
+            - StripPrefix=1 # මේක දැම්මම /api කෑල්ල අයින් කරලා සර්විස් එකට යවනවා
         - id: menu-service
           uri: lb://MENU-SERVICE
           predicates:
             - Path=/api/menu/**, /api/categories/**
+          filters:
+            - StripPrefix=1
         - id: order-service
           uri: lb://ORDER-SERVICE
           predicates:
             - Path=/api/orders/**
+          filters:
+            - StripPrefix=1
         - id: kitchen-service
           uri: lb://KITCHEN-SERVICE
           predicates:
             - Path=/api/kitchen/**
+          filters:
+            - StripPrefix=1
       globalcors:
         cors-configurations:
           '[/**]':
@@ -26,15 +33,3 @@ spring:
             allowedMethods: '*'
             allowedHeaders: '*'
             allowCredentials: true
-      default-filters:
-        - PreserveHostHeader
-
-server:
-  port: 8080
-
-# Actuator එකෙන් routes බලන්න මේක ඕනේ
-management:
-  endpoints:
-    web:
-      exposure:
-        include: '*'
