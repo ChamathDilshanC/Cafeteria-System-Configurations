@@ -1,13 +1,22 @@
 spring:
+  application:
+    name: api-gateway
   cloud:
     gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOriginPatterns: '*'
+            allowed-methods: '*'
+            allowed-headers: '*'
+            allow-credentials: true
       routes:
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
             - Path=/api/auth/**, /api/users/**
           filters:
-            - StripPrefix=1 # මේක දැම්මම /api කෑල්ල අයින් කරලා සර්විස් එකට යවනවා
+            - StripPrefix=1
         - id: menu-service
           uri: lb://MENU-SERVICE
           predicates:
@@ -26,10 +35,21 @@ spring:
             - Path=/api/kitchen/**
           filters:
             - StripPrefix=1
-      globalcors:
-        cors-configurations:
-          '[/**]':
-            allowedOriginPatterns: '*'
-            allowedMethods: '*'
-            allowedHeaders: '*'
-            allowCredentials: true
+      default-filters:
+        - PreserveHostHeader
+
+server:
+  port: 8080
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:9001/eureka/
+  instance:
+    prefer-ip-address: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,gateway,routes
