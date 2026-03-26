@@ -1,56 +1,44 @@
-# Kitchen Service Configuration
-
 spring:
   application:
     name: kitchen-service
-
-  # MongoDB Configuration
+  # MongoDB Configuration for Firestore API
   data:
     mongodb:
       uri: mongodb://root:JRTgq5KibyHckge0t5SWLXMgjzdH5IJk6ozSAx7k8pYrwoXp@f2e45088-9d0e-4153-9ea7-e017549f617d.asia-southeast1.firestore.goog:443/cafeteria-firestore-mongo?loadBalanced=true&tls=true&authMechanism=SCRAM-SHA-256&retryWrites=false
+      # Connection Pool settings
+      auto-index-creation: true
 
 server:
-  port: 0 # Use random port for better scalability and load balancing
+  port: 0 # Use random port for load balancing
 
 # Kitchen-specific Configuration
 kitchen:
   operations:
-    max-concurrent-orders: ${MAX_CONCURRENT_ORDERS:50}
-    prep-time-multiplier: ${PREP_TIME_MULTIPLIER:1.0}
-    auto-assign-orders: ${AUTO_ASSIGN_ORDERS:true}
-
-  # Order Status Update Configuration
+    max-concurrent-orders: 50
+    prep-time-multiplier: 1.0
+    auto-assign-orders: true
   status:
-    update-interval: ${STATUS_UPDATE_INTERVAL:30} # seconds
-    auto-complete-timeout: ${AUTO_COMPLETE_TIMEOUT:1800} # 30 minutes
-
-  # Queue Management
+    update-interval: 30 # seconds
+    auto-complete-timeout: 1800 # 30 minutes
   queue:
-    max-size: ${QUEUE_MAX_SIZE:100}
-    processing-timeout: ${PROCESSING_TIMEOUT:3600} # 1 hour
+    max-size: 100
+    processing-timeout: 3600 # 1 hour
 
-# MongoDB Connection Pool Configuration
-spring.data.mongodb:
-  connection-per-host: ${MONGO_CONNECTIONS_PER_HOST:10}
-  min-connections-per-host: ${MONGO_MIN_CONNECTIONS:5}
-  max-wait-time: ${MONGO_MAX_WAIT_TIME:10000}
-  connect-timeout: ${MONGO_CONNECT_TIMEOUT:5000}
-  socket-timeout: ${MONGO_SOCKET_TIMEOUT:5000}
-
-# WebSocket Configuration (for real-time updates)
+# WebSocket Configuration
 websocket:
-  enabled: ${WEBSOCKET_ENABLED:true}
-  path: ${WEBSOCKET_PATH:/kitchen-updates}
-  allowed-origins: ${WEBSOCKET_ORIGINS:http://localhost:3000,http://localhost:8080}
+  enabled: true
+  path: /kitchen-updates
+  allowed-origins: 'http://localhost:3000,http://localhost:8080'
 
 # Notification Configuration
 notification:
-  enabled: ${NOTIFICATION_ENABLED:true}
+  enabled: true
   channels:
-    email: ${EMAIL_NOTIFICATIONS:false}
-    websocket: ${WEBSOCKET_NOTIFICATIONS:true}
-    sms: ${SMS_NOTIFICATIONS:false}
+    email: false
+    websocket: true
+    sms: false
 
+# Actuator & Health Check
 management:
   endpoints:
     web:
@@ -58,10 +46,13 @@ management:
         include: health,info,metrics,mongodb
   endpoint:
     health:
-      show-details: when-authorized
+      show-details: always
   health:
     mongo:
       enabled: true
+
+# Eureka Registration
 eureka:
   instance:
-    instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
+    instanceId: ${spring.application.name}:${random.value}
+    prefer-ip-address: true
