@@ -3,6 +3,13 @@ spring:
     name: api-gateway
   cloud:
     gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOriginPatterns: '*'
+            allowed-methods: '*'
+            allowed-headers: '*'
+            allow-credentials: true
       server:
         webflux:
           routes:
@@ -30,17 +37,8 @@ spring:
                 - Path=/api/kitchen/**
               filters:
                 - StripPrefix=1
-
-          default-filters:
-            - PreserveHostHeader
-
-globalcors:
-  cors-configurations:
-    '[/**]':
-      allowedOriginPatterns: '*'
-      allowed-methods: '*'
-      allowed-headers: '*'
-      allow-credentials: true
+      default-filters:
+        - PreserveHostHeader
 
 server:
   port: 8080
