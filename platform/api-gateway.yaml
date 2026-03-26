@@ -1,37 +1,40 @@
 spring:
   cloud:
     gateway:
-      server:
-        webflux:
-          routes:
-            - id: user-service
-              uri: lb://USER-SERVICE
-              predicates:
-                - Path=/api/auth/**, /api/users/**
+      # මෙතන 'server' හෝ 'webflux' අයින් කළා. මේක තමයි standard විදිහ.
+      routes:
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/api/auth/**, /api/users/**
+        - id: menu-service
+          uri: lb://MENU-SERVICE
+          predicates:
+            - Path=/api/menu/**, /api/categories/**
+        - id: order-service
+          uri: lb://ORDER-SERVICE
+          predicates:
+            - Path=/api/orders/**
+        - id: kitchen-service
+          uri: lb://KITCHEN-SERVICE
+          predicates:
+            - Path=/api/kitchen/**
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOriginPatterns: '*'
+            allowedMethods: '*'
+            allowedHeaders: '*'
+            allowCredentials: true
+      default-filters:
+        - PreserveHostHeader
 
-            - id: menu-service
-              uri: lb://MENU-SERVICE
-              predicates:
-                - Path=/api/menu/**, /api/categories/**
-
-            - id: order-service
-              uri: lb://ORDER-SERVICE
-              predicates:
-                - Path=/api/orders/**
-
-            - id: kitchen-service
-              uri: lb://KITCHEN-SERVICE
-              predicates:
-                - Path=/api/kitchen/**
-
-          default-filters:
-            - PreserveHostHeader
-
-          globalcors:
-            cors-configurations:
-              '[/**]':
-                allowedOrigins: '*'
-                allowed-methods: '*'
-                allowed-headers: '*'
 server:
   port: 8080
+
+# Actuator එකෙන් routes බලන්න මේක ඕනේ
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
