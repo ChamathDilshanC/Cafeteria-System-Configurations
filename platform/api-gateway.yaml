@@ -3,6 +3,37 @@ spring:
     name: api-gateway
   cloud:
     gateway:
+      server:
+        webflux:
+          routes:
+            - id: user-service
+              uri: lb://USER-SERVICE
+              predicates:
+                - Path=/api/auth/**,/api/users/**
+              filters:
+                - StripPrefix=1
+
+            - id: menu-service
+              uri: lb://MENU-SERVICE
+              predicates:
+                - Path=/api/menu/**,/api/categories/**
+              filters:
+                - StripPrefix=1
+
+            - id: order-service
+              uri: lb://ORDER-SERVICE
+              predicates:
+                - Path=/api/orders/**
+              filters:
+                - StripPrefix=1
+
+            - id: kitchen-service
+              uri: lb://KITCHEN-SERVICE
+              predicates:
+                - Path=/api/kitchen/**
+              filters:
+                - StripPrefix=1
+
       globalcors:
         cors-configurations:
           '[/**]':
@@ -10,47 +41,9 @@ spring:
             allowed-methods: '*'
             allowed-headers: '*'
             allow-credentials: true
-      routes:
-        - id: user-service
-          uri: lb://USER-SERVICE
-          predicates:
-            - Path=/api/auth/**,/api/users/**
-          filters:
-            - StripPrefix=1
-        - id: menu-service
-          uri: lb://MENU-SERVICE
-          predicates:
-            - Path=/api/menu/**,/api/categories/**
-          filters:
-            - StripPrefix=1
-        - id: order-service
-          uri: lb://ORDER-SERVICE
-          predicates:
-            - Path=/api/orders/**
-          filters:
-            - StripPrefix=1
-        - id: kitchen-service
-          uri: lb://KITCHEN-SERVICE
-          predicates:
-            - Path=/api/kitchen/**
-          filters:
-            - StripPrefix=1
+
       default-filters:
         - PreserveHostHeader
 
 server:
   port: 8080
-
-eureka:
-  client:
-    service-url:
-      # ඔයාගේ Instance Group එකේ තියෙන IP ලිපින 3ම මෙතනට දාලා තියෙනවා (හිස්තැන් නොමැතිව)
-      defaultZone: http://10.148.0.5:9001/eureka/,http://10.148.0.4:9001/eureka/,http://10.148.0.3:9001/eureka/
-  instance:
-    prefer-ip-address: true
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,metrics,gateway,routes
