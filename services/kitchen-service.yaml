@@ -4,7 +4,7 @@ spring:
   # MongoDB Configuration for Firestore API
   data:
     mongodb:
-      uri: mongodb://root:Mr0FDDmizTACO3Dvw7LVxGCkJ7gTlHgQ4xl0ezAPjDQKxkyk@f2e45088-9d0e-4153-9ea7-e017549f617d.asia-southeast1.firestore.goog:443/cafeteria-firestore-mongo?loadBalanced=true&tls=true&authMechanism=SCRAM-SHA-256&retryWrites=false
+      uri: mongodb://chamath:cCfW7IHKhjqbvCjsq6PqtZnnp6rCtS9nE5WIKFKstCR9ztJd@f2e45088-9d0e-4153-9ea7-e017549f617d.asia-southeast1.firestore.goog:443/cafeteria-firestore-mongo?loadBalanced=true&tls=true&authMechanism=SCRAM-SHA-256&retryWrites=false
       # Connection Pool settings
       auto-index-creation: true
 
