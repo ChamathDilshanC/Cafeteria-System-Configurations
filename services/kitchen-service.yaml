@@ -1,15 +1,12 @@
 spring:
   application:
     name: kitchen-service
-  # MongoDB Configuration for Firestore API
-  data:
-    mongodb:
-      uri: mongodb://chamath:cCfW7IHKhjqbvCjsq6PqtZnnp6rCtS9nE5WIKFKstCR9ztJd@f2e45088-9d0e-4153-9ea7-e017549f617d.asia-southeast1.firestore.goog:443/cafeteria-firestore-mongo?loadBalanced=true&tls=true&authMechanism=SCRAM-SHA-256&retryWrites=false
-      # Connection Pool settings
-      auto-index-creation: true
+  mongodb:
+    uri: mongodb://chamath:cCfW7IHKhjqbvCjsq6PqtZnnp6rCtS9nE5WIKFKstCR9ztJd@f2e45088-9d0e-4153-9ea7-e017549f617d.asia-southeast1.firestore.goog:443/cafeteria-firestore-mongo?loadBalanced=true&tls=true&authMechanism=SCRAM-SHA-256&retryWrites=false
+    auto-index-creation: true
 
 server:
-  port: 0 # Use random port for load balancing
+  port: 0 # Load balancing සඳහා random port එකක් පාවිච්චි කරයි
 
 # Kitchen-specific Configuration
 kitchen:
