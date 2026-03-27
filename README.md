@@ -1,57 +1,157 @@
-# Cafeteria System — Centralized Configurations
+# Cafeteria System — Centralized Configurations (Local Reference)
 
-This repository contains the centralized configuration files for the **Cafeteria System** microservices architecture. It is designed to be served by the **Spring Cloud Config Server**.
+> **⚠️ Note**: This is a **local backup/reference copy** of configurations. The Config Server loads configurations from the **Git repository** at runtime.
+
+**Primary Configuration Source (Production):**
+📦 https://github.com/ChamathDilshanC/Cafeteria-System-Configurations
 
 ## 📌 Overview
-Instead of hardcoding database URLs, Eureka ports, and other properties inside each microservice's source code, all services fetch their configurations dynamically from this repository at startup.
 
-If any configuration changes (e.g., database password update), you only need to update the file here and restart the respective service.
+The **Spring Cloud Config Server** (port 9000) loads all configurations from the Git repository above. This local directory serves as:
 
-## 📂 Directory Structure
+- A reference copy for offline development
+- A fallback when Git repository is unavailable (native profile)
+- Documentation of the configuration structure
+
+## 🔄 How It Works
+
+1. **Config Server starts** → Clones the Git repository
+2. **Microservices start** → Contact Config Server at `http://localhost:9000`
+3. **Config Server serves** → Delivers configuration from Git repo to services
+
+## 📂 Git Repository Structure
+
 ```text
-configurations/
-├── application.yaml                  # Global fallback config (Eureka URLs)
-├── application-dev.yaml              # Global default config for Local/Dev
+Cafeteria-System-Configurations/
+├── application.yaml                  # Global config (Eureka cluster, logging)
 ├── platform/
-│   ├── api-gateway.yaml              # Gateway routing and CORS config
-│   ├── service-registry.yaml         # Eureka registry production config
-│   └── service-registry-dev.yaml     # Eureka registry local config
+│   ├── api-gateway.yaml              # Gateway routing, CORS, filters
+│   ├── config-server.yaml            # Config Server settings
+│   └── service-registry.yaml         # Eureka configuration
 └── services/
-    ├── kitchen-service.yaml          # MongoDB production config
-    ├── kitchen-service-dev.yaml      # MongoDB local config
-    ├── menu-service.yaml             # PostgreSQL & GCP storage production config
-    ├── menu-service-dev.yaml         # PostgreSQL & GCP storage local config
-    ├── order-service.yaml            # PostgreSQL production config
-    ├── order-service-dev.yaml        # PostgreSQL local config
-    ├── user-service.yaml             # PostgreSQL production config
-    └── user-service-dev.yaml         # PostgreSQL local config
+    ├── kitchen-service.yaml          # MongoDB connections, kitchen operations
+    ├── menu-service.yaml             # PostgreSQL + GCS image storage
+    ├── order-service.yaml            # PostgreSQL + OpenFeign settings
+    └── user-service.yaml             # PostgreSQL + JWT authentication
 ```
 
-## ⚙️ Profiles (Environments)
-Every service has two configuration files based on the active Spring profile:
+## 🗄️ Database Configuration
 
-1. **Production (Default Profile)**  
-   - Files like `menu-service.yaml`
-   - Configured for Docker/Kubernetes networking.
-   - Uses `vm-node-a.platform`, `config.platform` hostnames for service discovery and db connections.
+| Service         | Database   | Default DB Name   | Local Connection |
+| --------------- | ---------- | ----------------- | ---------------- |
+| user-service    | PostgreSQL | cafeteria_users   | localhost:5432   |
+| menu-service    | PostgreSQL | cafeteria_menu    | localhost:5432   |
+| order-service   | PostgreSQL | cafeteria_orders  | localhost:5432   |
+| kitchen-service | MongoDB    | cafeteria_kitchen | localhost:27017  |
 
-2. **Development (`dev` Profile)**  
-   - Files like `menu-service-dev.yaml`
-   - Configured for local development.
-   - Uses `localhost` for tracing, Eureka, and PostgreSQL/MongoDB connections.
-   - Run services with `-Dspring-boot.run.profiles=dev` to activate this.
+**Dev Credentials:**
 
-## 🗄️ Database Mapping
-- **Kitchen Service**: Uses MongoDB (`cafeteria-mongodb:27017`)
-- **Menu, Order, User Services**: Use PostgreSQL 16 (`cafeteria-postgresql:5432`)
-- **Credentials (Dev)**: Postgres (`postgres/postgres`), Mongo (`admin/adminpassword`)
+- PostgreSQL: `postgres` / `postgres`
+- MongoDB: `admin` / `adminpassword`
 
-## 🚀 How to Apply Updates
-1. Modify the necessary `.yaml` file.
-2. Commit and push the changes to your Git repository:
+## 🚀 Updating Configurations
+
+### For Production (Git Repository):
+
+1. Clone the configuration repository:
+
+   ```bash
+   git clone https://github.com/ChamathDilshanC/Cafeteria-System-Configurations.git
+   cd Cafeteria-System-Configurations
+   ```
+
+2. Modify the necessary `.yaml` file
+
+3. Commit and push changes:
+
    ```bash
    git add .
-   git commit -m "Updated configurations"
+   git commit -m "Update: [describe change]"
    git push origin main
    ```
-3. Restart the respective microservice to fetch the latest properties.
+
+4. Restart Config Server to fetch latest changes:
+
+   ```bash
+   pm2 restart config-server
+   ```
+
+5. Restart affected microservices or trigger refresh:
+
+   ```bash
+   # Option 1: Restart service
+   pm2 restart user-service
+
+   # Option 2: Dynamic refresh (if @RefreshScope is enabled)
+   curl -X POST http://localhost:8081/actuator/refresh
+   ```
+
+### For Local Development (This Directory):
+
+If using `native` profile (fallback mode), update files in this directory and restart Config Server.
+
+## 🔧 Config Server Settings
+
+**Git Mode (Primary):**
+
+```yaml
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/ChamathDilshanC/Cafeteria-System-Configurations.git
+          clone-on-start: true
+          search-paths: platform,services
+```
+
+**Native Mode (Fallback):**
+
+```yaml
+spring:
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: classpath:/configurations
+```
+
+## 📡 How Services Fetch Config
+
+Each microservice's `application.yml` contains:
+
+```yaml
+spring:
+  application:
+    name: user-service # Service name matches config file
+  config:
+    import: optional:configserver:http://localhost:9000
+```
+
+At startup:
+
+1. Service requests: `GET http://localhost:9000/user-service/default`
+2. Config Server fetches `services/user-service.yaml` from Git
+3. Service receives and applies configuration
+
+## 🌍 Environment Variables
+
+Services support environment variable overrides:
+
+```bash
+export CONFIG_SERVER_URI=http://config-server:9000
+export EUREKA_URI=http://localhost:8761/eureka
+export POSTGRES_HOST=localhost
+export POSTGRES_PASSWORD=postgres
+export MONGO_HOST=localhost
+```
+
+## 📚 Related Documentation
+
+- [Config Server README](../../README.md)
+- [Spring Cloud Config Docs](https://docs.spring.io/spring-cloud-config/docs/current/reference/html/)
+- [Main Project README](../../../../../README.md)
+
+---
+
+**ITS 2130 — Enterprise Cloud Architecture | Final Project**
