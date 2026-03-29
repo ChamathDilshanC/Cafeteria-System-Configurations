@@ -21,9 +21,9 @@ spring:
   # GCP Storage Configuration (for menu item images)
   cloud:
     gcp:
-      project-id: mineral-balm-491310-u1
+      project-id: sylvan-ocean-491718-p1
       storage:
-        bucket: cafeteria-system-menu-images-bucket
+        bucket: cafeteria-system-images-bucket-menu
 
   servlet:
     multipart:
