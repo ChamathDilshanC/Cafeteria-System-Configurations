@@ -2,7 +2,7 @@ spring:
   application:
     name: kitchen-service
   mongodb:
-    uri: mongodb://chamath:cCfW7IHKhjqbvCjsq6PqtZnnp6rCtS9nE5WIKFKstCR9ztJd@f2e45088-9d0e-4153-9ea7-e017549f617d.asia-southeast1.firestore.goog:443/cafeteria-firestore-mongo?loadBalanced=true&tls=true&authMechanism=SCRAM-SHA-256&retryWrites=false
+    uri: mongodb://root:U-WxdumW12QrMkXbIEHQzyWbwjlOh_Jvrt_w59yItyA8bYiO@b90439c8-d725-42ae-9af8-fee3805ec406.asia-southeast1.firestore.goog:443/cafeteria-firestore-mongo?loadBalanced=true&tls=true&authMechanism=SCRAM-SHA-256&retryWrites=false
     auto-index-creation: true
 
 server:
