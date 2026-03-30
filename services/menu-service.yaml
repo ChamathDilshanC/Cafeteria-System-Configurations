@@ -21,9 +21,9 @@ spring:
   # GCP Storage Configuration (for menu item images)
   cloud:
     gcp:
-      project-id: sylvan-ocean-491718-p1
+      project-id: cafeteria-system-chamath
       storage:
-        bucket: cafeteria-system-images-bucket-menu
+        bucket: cafeteria-system-menu-items-images
 
   servlet:
     multipart:
